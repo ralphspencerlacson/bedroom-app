@@ -14,11 +14,11 @@ export default function CameraHUD({ updateRate = 10 }) {
         fov: camera.fov.toFixed(2)
     });
 
-    
+
     const counter = useRef(0);
     useFrame(() => {
         counter.current = (counter.current + 1) % Math.max(1, updateRate);
-        
+
         if (counter.current !== 0) return;
         setInfo({
             x: camera.position.x.toFixed(2),
@@ -29,34 +29,26 @@ export default function CameraHUD({ updateRate = 10 }) {
     })
 
     return (
-        <Html fullscreen>
-            <div className='p-4'>
-                <h1>Camera Position</h1>
-                <p>FOV: {info.fov}</p>
-                <p>X: {info.x}</p>
-                <p>Y: {info.y}</p>
-                <p>Z: {info.z}</p>
+        <Html fullscreen transform={false} >
+            <div className='bg-gray-600 p-4 m-4 w-42 rounded-lg'>
+                <h1 className='text-white pointer-events-none'>Camera Position</h1>
+                <p className='pointer-events-none'>
+                    <span className='text-white mr-2'>FOV:</span> 
+                    <span className='text-white'>{info.fov}</span>
+                </p>
+                <p className='pointer-events-none'>
+                    <span className='text-red-500 mr-2'>X:</span> 
+                    <span className='text-white'>{info.x}</span>
+                </p>
+                <p className='pointer-events-none'>
+                    <span className='text-green-500 mr-2'>Y:</span> 
+                    <span className='text-white'>{info.y}</span>
+                </p>
+                <p className='pointer-events-none'>
+                    <span className='text-blue-500 mr-2'>Z:</span> 
+                    <span className='text-white'>{info.z}</span>
+                </p>
             </div>
         </Html>
     )
-
-//   return (
-//     <Html fullscreen>
-//       <div style={{
-//         position: 'fixed',
-//         left: 0,
-//         top: 0,
-//         background: 'rgba(0,0,0,0.6)',
-//         color: '#fff',
-//         padding: '6px 8px',
-//         borderRadius: 6,
-//         fontSize: 12,
-//         pointerEvents: 'none',
-//         zIndex: 9999
-//       }}>
-//         <div>Camera: {info.x}, {info.y}, {info.z}</div>
-//         <div>FOV: {info.fov}</div>
-//       </div>
-//     </Html>
-//   )
 }
