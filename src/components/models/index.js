@@ -6,6 +6,7 @@ export const dual_sense = '/models/dual_sense.glb'
 export const gaming_chair = '/models/gaming_chair.glb'
 export const gaming_desk = '/models/work_desk.glb'
 export const mac_laptop = '/models/mac_laptop.glb'
+export const mac_laptop_stand = '/models/mac_laptop_stand.glb'
 export const sony_console = '/models/sony_console.glb'
 export const television = '/models/television.glb'
 export const dog = '/models/dog.glb'
@@ -18,6 +19,7 @@ export default {
   gaming_chair,
   gaming_desk,
   mac_laptop,
+  mac_laptop_stand,
   sony_console,
   television,
   dog,

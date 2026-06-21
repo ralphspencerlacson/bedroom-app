@@ -7,7 +7,7 @@ export default function MacLaptopModel(props) {
     <Model
       path={mac_laptop}
       align="floor"
-      scale={1}
+      scale={340}
       rotation={[0, 0, 0]}
       {...props}
     />

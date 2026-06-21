@@ -7,7 +7,7 @@ export default function GamingDeskModel(props) {
     <Model
       path={gaming_desk}
       align="floor"
-      scale={0.06}
+      scale={0.068}
       rotation={[0, 0, 0]}
       {...props}
     />

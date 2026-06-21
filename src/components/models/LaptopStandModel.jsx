@@ -1,13 +1,13 @@
 import React from 'react'
 import Model, { preload as modelPreload } from '../common/Model'
-import { gaming_chair } from './index.js'
+import { mac_laptop_stand } from './index.js'
 
-export default function GamingChairModel(props) {
+export default function LaptopStandModel(props) {
   return (
     <Model
-      path={gaming_chair}
+      path={mac_laptop_stand}
       align="floor"
-      scale={3}
+      scale={0.06}
       rotation={[0, 0, 0]}
       {...props}
     />
@@ -15,5 +15,5 @@ export default function GamingChairModel(props) {
 }
 
 export function preload() {
-  modelPreload(gaming_chair)
+  modelPreload(mac_laptop_stand)
 }

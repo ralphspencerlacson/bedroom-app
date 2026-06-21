@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function Floor({ 
-    size = 300, 
+    size = 320, 
     color = '#e0e0e0', 
     thickness = 10, 
     topY = -0.5,

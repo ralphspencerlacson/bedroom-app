@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function Wall({
-  size = 300,
+  size = 320,
   height = 60,
   thickness = 2,
   color = '#ffffff',
