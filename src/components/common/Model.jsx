@@ -18,11 +18,16 @@ export default function Model({
 
     const cloned = scene.clone(true)
 
-    // shadows
+    // shadows + z-fighting prevention
     cloned.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = castShadow
         child.receiveShadow = receiveShadow
+        if (child.material) {
+          child.material.polygonOffset = true
+          child.material.polygonOffsetFactor = -1
+          child.material.polygonOffsetUnits = -1
+        }
       }
     })
 
