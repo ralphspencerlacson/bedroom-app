@@ -7,7 +7,6 @@ export default function HudPanel({ info, mode, lightsOn, onToggleMode, onToggleL
             <p className='pointer-events-none'><span className='text-green-400 mr-2'>Y:</span><span className='text-white'>{info.y}</span></p>
             <p className='pointer-events-none'><span className='text-blue-400 mr-2'>Z:</span><span className='text-white'>{info.z}</span></p>
 
-            <hr className='border-gray-500 my-2' />
 
             <div className='flex gap-2 pointer-events-auto'>
                 <button onClick={onToggleMode} className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold cursor-pointer min-w-[62px] justify-center ${mode === 'day' ? 'bg-yellow-500 text-black' : 'bg-indigo-700 text-white'}`}>

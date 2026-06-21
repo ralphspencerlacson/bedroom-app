@@ -37,10 +37,10 @@ function App() {
 
   return (
     <>
-      <Canvas shadows camera={{ position: [382, 400 , 362], fov: 36, far: 10000, near: 0.5 }} gl={{ toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 0.7 }}>
+      <Canvas shadows camera={{ position: [344, 250, 350], fov: 40, far: 10000, near: 0.5 }} gl={{ toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 0.7 }}>
         <Scene isNight={isNight} lightsOn={lightsOn} />
 
-        <OrbitControls target={[0, 0, 0]} />
+        <OrbitControls target={[-54, -8, -46]} />
 
         <CameraHudTracker updateRate={8} onInfo={setInfo} />
       </Canvas>
