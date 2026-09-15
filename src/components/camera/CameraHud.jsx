@@ -1,25 +1,16 @@
 import { useRef } from 'react'
-import { GizmoHelper, GizmoViewport } from '@react-three/drei'
-import { useFrame, useThree } from '@react-three/fiber'
+import { Html } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 
-export default function CameraHudTracker({ updateRate = 10, onInfo }) {
-    const { camera } = useThree()
-    const counter = useRef(0)
-
-    useFrame(() => {
-        counter.current = (counter.current + 1) % Math.max(1, updateRate)
-        if (counter.current !== 0) return
-        onInfo({
-            x: camera.position.x.toFixed(2),
-            y: camera.position.y.toFixed(2),
-            z: camera.position.z.toFixed(2),
-            fov: camera.fov.toFixed(2),
-        })
-    })
-
-    return (
-        <GizmoHelper alignment="bottom-left" margins={[80, 80]}>
-            <GizmoViewport axisColors={['#ff365c', '#00ff88', '#48a9ff']} labelColor="white" disabled />
-        </GizmoHelper>
-    )
+export default function CameraHud() {
+  const output = useRef()
+  const elapsed = useRef(0)
+  useFrame(({ camera }, delta) => {
+    elapsed.current += delta
+    if (elapsed.current < 0.2 || !output.current) return
+    elapsed.current = 0
+    const text = `X ${camera.position.x.toFixed(1)} · Y ${camera.position.y.toFixed(1)} · Z ${camera.position.z.toFixed(1)} · FOV ${camera.fov.toFixed(0)}`
+    if (output.current.textContent !== text) output.current.textContent = text
+  })
+  return <Html fullscreen style={{ pointerEvents: 'none' }}><output className="camera-debug" ref={output} /></Html>
 }

@@ -13,7 +13,3 @@ export default function CoffeeTableModel(props) {
     />
   )
 }
-
-export function preload() {
-  Model.preload && Model.preload(coffee_table)
-}

@@ -1,23 +1,13 @@
-export default function HudPanel({ info, mode, lightsOn, onToggleMode, onToggleLights }) {
-    return (
-        <div style={{ position: 'fixed', top: 12, left: 12, zIndex: 9999, padding: 12 }} className='bg-gray-700/90 rounded-lg font-mono text-xs pointer-events-none'>
-            <h1 className='text-white text-sm font-semibold mb-2 pointer-events-none'>Camera Position</h1>
-            <p className='pointer-events-none'><span className='text-white mr-2'>FOV:</span><span className='text-white'>{info.fov}</span></p>
-            <p className='pointer-events-none'><span className='text-red-400 mr-2'>X:</span><span className='text-white'>{info.x}</span></p>
-            <p className='pointer-events-none'><span className='text-green-400 mr-2'>Y:</span><span className='text-white'>{info.y}</span></p>
-            <p className='pointer-events-none'><span className='text-blue-400 mr-2'>Z:</span><span className='text-white'>{info.z}</span></p>
-
-
-            <div className='flex gap-2 pointer-events-auto'>
-                <button onClick={onToggleMode} className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold cursor-pointer min-w-[62px] justify-center ${mode === 'day' ? 'bg-yellow-500 text-black' : 'bg-indigo-700 text-white'}`}>
-                    <span>{mode === 'day' ? '☀' : '☾'}</span>
-                    <span>{mode === 'day' ? 'Day' : 'Night'}</span>
-                </button>
-                <button onClick={onToggleLights} className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold cursor-pointer min-w-[56px] justify-center ${lightsOn ? 'bg-orange-400 text-black' : 'bg-gray-700 text-gray-300'}`}>
-                    <span>💡</span>
-                    <span>{lightsOn ? 'On' : 'Off'}</span>
-                </button>
-            </div>
-        </div>
-    )
+export default function HudPanel({ mode, lightsOn, isFloating, view, debug, onToggleMode, onToggleLights, onToggleFloat, onView, onDebug }) {
+  return <>
+    <header className="room-header"><div><span className="eyebrow">Your own little corner</span><h1>My room<span>.</span></h1><p>Work, play, and a little time to unwind.</p></div><button className="quiet-button" onClick={() => onView('room')} aria-label="Reset camera to room view">↺ <span>Reset view</span></button></header>
+    <aside className="room-controls" aria-label="Room controls">
+      <div className="control-section"><span className="control-label">Take a look around</span><nav className="view-tabs" aria-label="Camera views">{[['room', 'Room'], ['workspace', 'Workspace'], ['gaming', 'Gaming']].map(([name, label]) => <button key={name} aria-pressed={view === name} onClick={() => onView(name)}>{label}</button>)}</nav></div>
+      <div className="control-divider" />
+      <div className="control-section"><span className="control-label">Set the mood</span><div className="mood-controls"><button aria-label="Night mode" aria-pressed={mode === 'night'} onClick={onToggleMode}>{mode === 'day' ? '☀ Daylight' : '☾ Nighttime'}</button><button aria-label="Room lights" aria-pressed={lightsOn} onClick={onToggleLights}><span className={`light-dot ${lightsOn ? 'on' : ''}`} />Lights {lightsOn ? 'on' : 'off'}</button></div></div>
+      <div className="control-divider" />
+      <button className="float-button" aria-pressed={isFloating} onClick={onToggleFloat}>{isFloating ? '↓ Bring it back' : '↑ A little magic'}<span>{isFloating ? 'Return the TV & controllers' : 'Make the TV & controllers float'}</span></button>
+    </aside>
+    <footer className="room-footer"><p>Drag to explore <span>·</span> Scroll or pinch to zoom <span>·</span> Click the TV for a surprise</p><button className="debug-toggle" aria-pressed={debug} onClick={onDebug}>Camera info</button></footer>
+  </>
 }

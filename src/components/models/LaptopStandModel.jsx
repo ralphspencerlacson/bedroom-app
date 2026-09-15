@@ -1,5 +1,5 @@
 import React from 'react'
-import Model, { preload as modelPreload } from '../common/Model'
+import Model from '../common/Model'
 import { mac_laptop_stand } from './index.js'
 
 export default function LaptopStandModel(props) {
@@ -12,8 +12,4 @@ export default function LaptopStandModel(props) {
       {...props}
     />
   )
-}
-
-export function preload() {
-  modelPreload(mac_laptop_stand)
 }

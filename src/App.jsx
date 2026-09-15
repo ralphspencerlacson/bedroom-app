@@ -1,53 +1,33 @@
-import { useEffect, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
-import * as THREE from 'three'
+import { Component, Suspense, lazy, useState } from 'react'
+import HudPanel from './components/common/HudPanel'
 import './App.css'
 
-import Scene from './components/Scene'
-import CameraHudTracker from './components/camera/CameraHud'
-import HudPanel from './components/common/HudPanel'
-import { preload as preloadSofa } from './components/models/SofaModel'
-import { preload as preloadTelevision } from './components/models/TelevisionModel'
-import { preload as preloadDeskSet } from './components/models/DeskSetModel'
-import { preload as preloadConsole } from './components/models/SonyConsoleModel'
-import { preload as preloadDualSense1 } from './components/models/DualSenseModel1'
-import { preload as preloadDualSense2 } from './components/models/DualSenseModel2'
-import { preload as preloadGamingDesk } from './components/models/GamingDeskModel'
-import { preload as preloadGamingChair } from './components/models/GamingChairModel'
-import { preload as preloadMacLaptop } from './components/models/MacLaptopModel'
+const RoomCanvas = lazy(() => import('./components/RoomCanvas'))
 
-function App() {
-    const [mode, setMode] = useState('day')
-    const [lightsOn, setLightsOn] = useState(true)
-    const [info, setInfo] = useState({ x: '0', y: '0', z: '0', fov: '0' })
-    const isNight = mode === 'night'
-
-    useEffect(() => {
-    preloadSofa()
-    preloadTelevision()
-    preloadDeskSet()
-    preloadConsole()
-    preloadDualSense1()
-    preloadDualSense2()
-    preloadGamingDesk()
-    preloadGamingChair()
-    preloadMacLaptop()
-  }, [])
-
-  return (
-    <>
-      <Canvas shadows camera={{ position: [344, 250, 350], fov: 40, far: 10000, near: 0.5 }} gl={{ toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 0.7 }}>
-        <Scene isNight={isNight} lightsOn={lightsOn} />
-
-        <OrbitControls target={[-54, -8, -46]} />
-
-        <CameraHudTracker updateRate={8} onInfo={setInfo} />
-      </Canvas>
-
-      <HudPanel info={info} mode={mode} lightsOn={lightsOn} onToggleMode={() => setMode(m => m === 'day' ? 'night' : 'day')} onToggleLights={() => setLightsOn(l => !l)} />
-    </>
-  )
+class RoomBoundary extends Component {
+  state = { failed: false }
+  static getDerivedStateFromError() { return { failed: true } }
+  render() {
+    if (this.state.failed) return <div className="loading-screen" role="alert"><div className="loading-card"><span className="eyebrow">A little interruption</span><h2>The room couldn’t load</h2><p>Check your connection and try again.</p><button onClick={() => window.location.reload()}>Reload room</button></div></div>
+    return this.props.children
+  }
 }
 
-export default App
+export default function App() {
+  const [mode, setMode] = useState('day')
+  const [lightsOn, setLightsOn] = useState(true)
+  const [isFloating, setIsFloating] = useState(false)
+  const [view, setView] = useState({ name: 'room', request: 0 })
+  const [debug, setDebug] = useState(false)
+  return <main className="room-app">
+    <RoomBoundary>
+      <Suspense fallback={<div className="loading-screen" role="status"><div className="loading-card"><span className="eyebrow">Make yourself at home</span><h2>Opening your room…</h2></div></div>}>
+        <RoomCanvas mode={mode} lightsOn={lightsOn} isFloating={isFloating} onToggleFloat={() => setIsFloating(value => !value)} view={view} debug={debug} />
+      </Suspense>
+    </RoomBoundary>
+    <HudPanel mode={mode} lightsOn={lightsOn} isFloating={isFloating} view={view.name} debug={debug}
+      onToggleMode={() => setMode(value => value === 'day' ? 'night' : 'day')}
+      onToggleLights={() => setLightsOn(value => !value)} onToggleFloat={() => setIsFloating(value => !value)}
+      onView={name => setView(value => ({ name, request: value.request + 1 }))} onDebug={() => setDebug(value => !value)} />
+  </main>
+}

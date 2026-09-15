@@ -1,5 +1,5 @@
 import React from 'react'
-import Model, { preload as modelPreload } from '../common/Model'
+import Model from '../common/Model'
 import { dual_sense } from './index.js'
 
 export default function DualSenseModel2(props) {
@@ -12,8 +12,4 @@ export default function DualSenseModel2(props) {
       {...props}
     />
   )
-}
-
-export function preload() {
-  modelPreload(dual_sense)
 }

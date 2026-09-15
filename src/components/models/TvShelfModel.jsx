@@ -13,7 +13,3 @@ export default function TvShelfModel(props) {
     />
   )
 }
-
-export function preload() {
-  Model.preload && Model.preload(tv_shelf)
-}

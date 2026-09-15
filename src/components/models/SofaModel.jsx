@@ -1,5 +1,5 @@
 import React from 'react'
-import Model, { preload as modelPreload } from '../common/Model'
+import Model from '../common/Model'
 import { sofa } from './index.js'
 
 export default function SofaModel(props) {
@@ -12,8 +12,4 @@ export default function SofaModel(props) {
       {...props}
     />
   )
-}
-
-export function preload() {
-  modelPreload(sofa)
 }

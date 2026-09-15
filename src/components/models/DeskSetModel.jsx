@@ -1,5 +1,5 @@
 import React from 'react'
-import Model, { preload as modelPreload } from '../common/Model'
+import Model from '../common/Model'
 import { desk_set } from './index.js'
 
 export default function DeskSetModel(props) {
@@ -12,8 +12,4 @@ export default function DeskSetModel(props) {
       {...props}
     />
   )
-}
-
-export function preload() {
-  modelPreload(desk_set)
 }

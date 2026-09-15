@@ -1,62 +1,27 @@
-import React, { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { Box3, Vector3 } from 'three'
 
-export default function Model({
-  path,
-  align = 'floor',
-  castShadow = true,
-  receiveShadow = true,
-  onLoad,
-  ...props
-}) {
+export default function Model({ path, align = 'floor', anchor, castShadow = true, receiveShadow = true, onLoad, prepare, ...props }) {
   const { scene } = useGLTF(path)
-
-  // clone + offset applied synchronously in one useMemo — never in useEffect
-  const clone = useMemo(() => {
-    if (!scene) return null
-
-    const cloned = scene.clone(true)
-
-    // shadows + z-fighting prevention
-    cloned.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = castShadow
-        child.receiveShadow = receiveShadow
-        if (child.material) {
-          child.material.polygonOffset = true
-          child.material.polygonOffsetFactor = -1
-          child.material.polygonOffsetUnits = -1
-        }
-      }
+  const { clone, bounds } = useMemo(() => {
+    const clone = scene.clone(true)
+    clone.traverse(child => {
+      if (!child.isMesh) return
+      child.castShadow = castShadow
+      child.receiveShadow = receiveShadow
     })
+    prepare?.(clone)
+    clone.updateMatrixWorld(true)
+    const box = new Box3().setFromObject((anchor && clone.getObjectByName(anchor)) || clone)
+    const center = box.getCenter(new Vector3())
+    const size = box.getSize(new Vector3())
+    clone.position.x -= center.x
+    clone.position.y -= align === 'floor' ? box.min.y : center.y
+    clone.position.z -= center.z
+    return { clone, bounds: { box, center, size } }
+  }, [scene, align, anchor, castShadow, receiveShadow, prepare])
 
-    // compute bounding box and apply centering offset directly on the clone
-    const box = new Box3().setFromObject(cloned)
-    const center = new Vector3()
-    const size = new Vector3()
-    box.getCenter(center)
-    box.getSize(size)
-
-    cloned.position.x -= center.x
-    cloned.position.y -= align === 'floor' ? box.min.y : center.y
-    cloned.position.z -= center.z
-
-    if (typeof onLoad === 'function') onLoad({ size, center, box })
-
-    return cloned
-  }, [scene, align, castShadow, receiveShadow]) // onLoad intentionally omitted to avoid re-clone on every render
-
-  if (!clone) return null
-
-  // world transforms go on the outer group via spread props (position/rotation/scale)
-  return (
-    <group {...props}>
-      <primitive object={clone} />
-    </group>
-  )
-}
-
-export function preload(path) {
-  useGLTF.preload(path)
+  useEffect(() => { onLoad?.(bounds) }, [onLoad, bounds])
+  return <group {...props}><primitive object={clone} dispose={null} /></group>
 }
